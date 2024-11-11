@@ -113,7 +113,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor //롬복 라이브러리를 사용하는 애노테이션
 @RestController //빈 등록 + 컨트롤러(요청받고 응답받는 역할) 임명, 빈등록은 스프링 컨테이너가 직접 객체화를 한다.
 @RequestMapping("/board")
-public class BoardController {
+public class BoardController { //BoardService가 먼저 객체화된 후 BoardController에 주입됨
     private final BoardService boardService;
 
     // @RequiredArgsConstructor 애노테이션을 붙이면 아래 생성자가 자동으로 만들어진다.
