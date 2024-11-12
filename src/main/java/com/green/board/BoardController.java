@@ -1,8 +1,6 @@
 package com.green.board;
 
-import com.green.board.model.BoardInsReq;
-import com.green.board.model.BoardSelOneRes;
-import com.green.board.model.BoardSelRes;
+import com.green.board.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +11,8 @@ import java.util.List;
                       로직처리는 하지 않는다.
 
     Annotation(애노테이션)
-    @Controller - 응답을 html (데이터로 만든 화면을 응답)
-    @RestController - 응답을 json (데이터만 응답)
+    @Controller - 응답을 html (데이터로 만든 화면으로 응답)
+    @RestController - 응답을 json으로 한다. (데이터만 응답)
 
     @RequestMapping - URL과 클래스 아래에 있는 Method 맵핑(연결)
                       class에 RequestMapping 전체 메소드 주소가 맵핑
@@ -106,14 +104,15 @@ import java.util.List;
  */
 
 /*
-    final 붙은 멤버필드 DI(Dependency Injection, 외부에서 주소값을 넣어주는 것(생성자 or setter))를 받을 수 있게
+    final 붙은 멤버필드 DI(Dependency Injection,
+    외부에서 주소값을 넣어주는 것(생성자 or setter or 명시적(@Autowired >> 비권장)))를 받을 수 있게
     생성자를 만든다.
     애노테이션 생략하면 오버로딩된 생성자를 직접 만들어주면 된다.
 */
 
-@RequiredArgsConstructor //롬복 라이브러리를 사용하는 애노테이션
-@RestController //빈 등록 + 컨트롤러(요청받고 응답받는 역할) 임명, 빈등록은 스프링 컨테이너가 직접 객체화를 한다.
-@RequestMapping("/board")
+@RequiredArgsConstructor //롬복 라이브러리를 사용하는 애노테이션 >> 생성자 자동으로 만들어줌
+@RestController //빈 등록(객체화하고 주소값 가지고 있어라) + 컨트롤러(요청받고 응답받는 역할) 임명, 빈등록은 스프링 컨테이너가 직접 객체화를 한다.
+@RequestMapping("/board") //전체 메소드 주소가 맵핑, 주로 class위에 작성
 public class BoardController { //BoardService가 먼저 객체화된 후 BoardController에 주입됨
     private final BoardService service;
 
@@ -141,5 +140,23 @@ public class BoardController { //BoardService가 먼저 객체화된 후 BoardCo
     @GetMapping("{boardId}")
     public BoardSelOneRes selBoardOne(@PathVariable int boardId) {
         return service.selBoardOne(boardId);
+    }
+
+
+
+    @PutMapping
+    public int updBoard(@RequestBody BoardUpdReq p) { //@RequestBody : JSON이 넘어왔을 때 >> push/put/patch
+        System.out.println(p);
+        return service.updBoard(p);
+    }
+
+    /*
+    @ModelAttribute: FormData or Query String 데이터를 받을 수 있다.
+     */
+
+    @DeleteMapping
+    public int delBoard(@ModelAttribute BoardDelReq p) { //@ModelAttribute 생략 가능, 쿼리스트링 받을 때 >> get/delete/select
+        System.out.println(p);
+        return service.delBoard(p);
     }
 }

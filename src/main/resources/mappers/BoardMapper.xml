@@ -34,8 +34,34 @@
     </select>
 
     <select id="selBoardOne">
-        SELECT board_id AS boardId, title, contents writer, created_at AS createdAt
+        SELECT board_id AS boardId, title, contents, writer, created_at AS createdAt
         FROM board
         WHERE board_id = #{board_id}
     </select>
+
+    <update id="updBoard">
+        UPDATE board
+        <set>
+            <if test=" title != null and title != '' ">
+                title = #{title}
+            </if>
+            <if test=" contents != null and contents != '' ">
+                    , contents = #{contents}
+            </if>
+            <if test=" writer != null and writer != '' ">
+                , writer = #{writer}
+            </if>
+        </set>
+        WHERE board_id = #{boardId}
+    </update>
+
+    <delete id="delBoard">
+        DELETE FROM board
+         WHERE board_id = #{boardId}
+           AND writer = #{writer}
+    </delete>
+
 </mapper>
+
+
+
